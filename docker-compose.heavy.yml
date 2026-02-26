@@ -1,0 +1,10 @@
+services:
+  fraudstream-heavy-note:
+    image: alpine:3.20
+    command: ["sh", "-c", "echo heavy profile placeholder; sleep infinity"]
+    profiles: ["heavy"]
+
+  brainsight-heavy-note:
+    image: alpine:3.20
+    command: ["sh", "-c", "echo heavy profile placeholder; sleep infinity"]
+    profiles: ["heavy"]

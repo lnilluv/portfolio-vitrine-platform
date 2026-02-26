@@ -1,0 +1,31 @@
+services:
+  showcase-streamlit:
+    build:
+      context: ./services/showcase-streamlit
+    expose:
+      - "8501"
+    command: streamlit run app.py --server.port 8501
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.showcase.rule=Host(`${SHOWCASE_HOST}`)
+      - traefik.http.services.showcase.loadbalancer.server.port=8501
+    restart: unless-stopped
+    mem_limit: 700m
+    cpus: 0.80
+
+  nlp-spam-api:
+    build:
+      context: ../nlp-spam-detector-api
+      dockerfile: Dockerfile.cpu
+    environment:
+      MODEL_BACKEND: keyword
+      MODEL_RUNTIME: cpu
+    expose:
+      - "8000"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.spam.rule=Host(`${SPAM_HOST}`)
+      - traefik.http.services.spam.loadbalancer.server.port=8000
+    restart: unless-stopped
+    mem_limit: 600m
+    cpus: 0.80
