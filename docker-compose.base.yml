@@ -15,7 +15,8 @@ services:
 
   portfolio-api:
     build:
-      context: ./services/portfolio-api
+      context: .
+      dockerfile: services/portfolio-api/Dockerfile
     expose:
       - "8000"
     labels:
