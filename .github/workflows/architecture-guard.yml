@@ -1,0 +1,13 @@
+name: Architecture Guard
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check-hexagonal-boundaries:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate architecture boundaries
+        run: python3 tools/architecture/check_hexagonal_boundaries.py

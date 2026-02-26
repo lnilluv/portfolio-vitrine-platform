@@ -11,4 +11,4 @@ COPY data/projects /app/data/projects
 
 EXPOSE 8000
 
-CMD ["python", "-m", "portfolio_api.adapters.http.server"]
+CMD ["python", "-m", "portfolio_api.composition_root.main"]
