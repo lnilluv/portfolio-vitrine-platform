@@ -4,3 +4,11 @@ __pycache__/
 .env
 .worktrees/
 worktrees/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.log
+.DS_Store
+letsencrypt/
+services/**/.streamlit/secrets.toml
