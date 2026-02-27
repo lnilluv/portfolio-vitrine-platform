@@ -1,6 +1,6 @@
 services:
   proxy:
-    image: traefik:v3.3
+    image: traefik:v3.4
     environment:
       DOCKER_API_VERSION: "1.44"
     command:
