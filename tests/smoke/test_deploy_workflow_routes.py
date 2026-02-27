@@ -7,6 +7,8 @@ class DeployWorkflowRoutesTest(unittest.TestCase):
         workflow = Path(
             ".github/workflows/deploy-production.yml"
         ).read_text(encoding="utf-8")
+        self.assertIn("--profile heavy", workflow)
+        self.assertIn("-f docker-compose.heavy.yml", workflow)
         self.assertIn("--force-recreate proxy", workflow)
         self.assertIn(
             "curl -skf --resolve nilluv.com:443:127.0.0.1 https://nilluv.com",

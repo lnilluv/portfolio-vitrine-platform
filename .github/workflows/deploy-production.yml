@@ -39,18 +39,18 @@ jobs:
             set -euo pipefail
             cd /opt/portfolio/compose
             docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" -p "${{ secrets.GHCR_TOKEN }}"
-            docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml pull
-            docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml up -d --force-recreate proxy
-            docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml up -d --build --remove-orphans
-            docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml ps
+            docker compose --env-file /opt/portfolio/env/.env --profile heavy -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml -f docker-compose.heavy.yml pull
+            docker compose --env-file /opt/portfolio/env/.env --profile heavy -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml -f docker-compose.heavy.yml up -d --force-recreate proxy
+            docker compose --env-file /opt/portfolio/env/.env --profile heavy -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml -f docker-compose.heavy.yml up -d --build --remove-orphans
+            docker compose --env-file /opt/portfolio/env/.env --profile heavy -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml -f docker-compose.heavy.yml ps
           '
 
       - name: Smoke checks
         run: |
           tailscale ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -euo pipefail
-            docker compose --env-file /opt/portfolio/env/.env -f /opt/portfolio/compose/docker-compose.base.yml -f /opt/portfolio/compose/docker-compose.demos.yml -f /opt/portfolio/compose/docker-compose.projects.yml ps
-            for container in compose-proxy-1 compose-portfolio-web-1 compose-portfolio-api-1 compose-nlp-spam-api-1; do
+            docker compose --env-file /opt/portfolio/env/.env --profile heavy -f /opt/portfolio/compose/docker-compose.base.yml -f /opt/portfolio/compose/docker-compose.demos.yml -f /opt/portfolio/compose/docker-compose.projects.yml -f /opt/portfolio/compose/docker-compose.heavy.yml ps
+            for container in compose-proxy-1 compose-portfolio-web-1 compose-portfolio-api-1 compose-nlp-spam-api-1 compose-brainsight-1 compose-getaround-1 compose-fraudstream-1; do
               [ "$(docker inspect -f "{{.State.Status}}" "$container")" = "running" ]
             done
             if ! curl -skf --resolve nilluv.com:443:127.0.0.1 https://nilluv.com > /dev/null; then
