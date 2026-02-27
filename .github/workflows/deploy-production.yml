@@ -54,11 +54,13 @@ jobs:
               [ "$(docker inspect -f "{{.State.Status}}" "$container")" = "running" ]
             done
             if ! curl -skf --resolve nilluv.com:443:127.0.0.1 https://nilluv.com > /dev/null; then
+              docker inspect compose-proxy-1 --format "{{json .Config.Env}}"
               docker inspect compose-portfolio-web-1 --format "{{json .Config.Labels}}"
               docker logs compose-proxy-1 --tail 120
               exit 1
             fi
             if ! curl -skf --resolve api.nilluv.com:443:127.0.0.1 https://api.nilluv.com/healthz > /dev/null; then
+              docker inspect compose-proxy-1 --format "{{json .Config.Env}}"
               docker inspect compose-portfolio-api-1 --format "{{json .Config.Labels}}"
               docker logs compose-proxy-1 --tail 120
               exit 1
