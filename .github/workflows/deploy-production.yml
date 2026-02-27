@@ -52,6 +52,6 @@ jobs:
             for container in compose-proxy-1 compose-portfolio-web-1 compose-portfolio-api-1 compose-nlp-spam-api-1; do
               [ "$(docker inspect -f "{{.State.Status}}" "$container")" = "running" ]
             done
-            docker exec compose-portfolio-api-1 python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=10)"
-            docker exec compose-nlp-spam-api-1 python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=10)"
+            docker exec compose-portfolio-api-1 python -c "import urllib.request; urllib.request.urlopen(\"http://127.0.0.1:8000/healthz\", timeout=10)"
+            docker exec compose-nlp-spam-api-1 python -c "import urllib.request; urllib.request.urlopen(\"http://127.0.0.1:8000/healthz\", timeout=10)"
           '
