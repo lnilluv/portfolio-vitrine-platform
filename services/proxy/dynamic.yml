@@ -1,0 +1,110 @@
+http:
+  routers:
+    www-redirect:
+      rule: Host(`www.nilluv.com`)
+      entryPoints:
+        - websecure
+      middlewares:
+        - www-to-apex
+      service: noop@internal
+      tls:
+        certResolver: letsencrypt
+
+    portfolio-web:
+      rule: Host(`nilluv.com`)
+      entryPoints:
+        - websecure
+      service: portfolio-web
+      tls:
+        certResolver: letsencrypt
+
+    portfolio-api:
+      rule: Host(`api.nilluv.com`)
+      entryPoints:
+        - websecure
+      service: portfolio-api
+      tls:
+        certResolver: letsencrypt
+
+    showcase:
+      rule: Host(`showcase.nilluv.com`)
+      entryPoints:
+        - websecure
+      service: showcase-streamlit
+      tls:
+        certResolver: letsencrypt
+
+    spam:
+      rule: Host(`spam.nilluv.com`)
+      entryPoints:
+        - websecure
+      service: nlp-spam-api
+      tls:
+        certResolver: letsencrypt
+
+    brainsight:
+      rule: Host(`brainsight.nilluv.com`)
+      entryPoints:
+        - websecure
+      service: brainsight
+      tls:
+        certResolver: letsencrypt
+
+    getaround:
+      rule: Host(`getaround.nilluv.com`)
+      entryPoints:
+        - websecure
+      service: getaround
+      tls:
+        certResolver: letsencrypt
+
+    fraudstream:
+      rule: Host(`fraudstream.nilluv.com`)
+      entryPoints:
+        - websecure
+      service: fraudstream
+      tls:
+        certResolver: letsencrypt
+
+  middlewares:
+    www-to-apex:
+      redirectRegex:
+        regex: ^https://www\.(.+)
+        replacement: https://${1}
+        permanent: true
+
+  services:
+    portfolio-web:
+      loadBalancer:
+        servers:
+          - url: http://portfolio-web:4173
+
+    portfolio-api:
+      loadBalancer:
+        servers:
+          - url: http://portfolio-api:8000
+
+    showcase-streamlit:
+      loadBalancer:
+        servers:
+          - url: http://showcase-streamlit:8501
+
+    nlp-spam-api:
+      loadBalancer:
+        servers:
+          - url: http://nlp-spam-api:8000
+
+    brainsight:
+      loadBalancer:
+        servers:
+          - url: http://brainsight:8501
+
+    getaround:
+      loadBalancer:
+        servers:
+          - url: http://getaround:8501
+
+    fraudstream:
+      loadBalancer:
+        servers:
+          - url: http://fraudstream:8501
