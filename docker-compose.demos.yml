@@ -9,15 +9,16 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.showcase.rule=Host(`${SHOWCASE_HOST}`)
+      - traefik.http.routers.showcase.entrypoints=websecure
+      - traefik.http.routers.showcase.tls=true
+      - traefik.http.routers.showcase.tls.certresolver=letsencrypt
       - traefik.http.services.showcase.loadbalancer.server.port=8501
     restart: unless-stopped
     mem_limit: 700m
     cpus: 0.80
 
   nlp-spam-api:
-    build:
-      context: ../nlp-spam-detector-api
-      dockerfile: Dockerfile.cpu
+    image: ${NLP_SPAM_IMAGE}
     environment:
       MODEL_BACKEND: keyword
       MODEL_RUNTIME: cpu
@@ -26,6 +27,9 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.spam.rule=Host(`${SPAM_HOST}`)
+      - traefik.http.routers.spam.entrypoints=websecure
+      - traefik.http.routers.spam.tls=true
+      - traefik.http.routers.spam.tls.certresolver=letsencrypt
       - traefik.http.services.spam.loadbalancer.server.port=8000
     restart: unless-stopped
     mem_limit: 600m

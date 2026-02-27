@@ -3,20 +3,48 @@
 ## Prerequisites
 
 - Docker Engine with Compose plugin.
-- DNS records set for portfolio, api, demo, and spam hosts.
+- DNS records set for `nilluv.com`, `www.nilluv.com`, and `*.nilluv.com`.
+- GitHub Environment `production` with required secrets.
 
-## Deploy base stack
+## Required GitHub Environment secrets
+
+- `TAILSCALE_AUTHKEY`
+- `VPS_HOST` (`prod-vps-3`)
+- `VPS_USER` (`devops`)
+- `GHCR_USERNAME`
+- `GHCR_TOKEN`
+- `PORTFOLIO_ENV_FILE` (multiline env file payload)
+
+`prod-vps-3` must allow Tailscale SSH for the deploy principal.
+
+## VPS bootstrap (one-time)
+
+```bash
+ssh devops@prod-vps-3
+sudo mkdir -p /opt/portfolio/{compose,env,data,logs}
+sudo chown -R devops:devops /opt/portfolio
+```
+
+## Manual deploy (fallback)
 
 ```bash
 cp .env.example .env
-docker compose -f docker-compose.base.yml up -d --build
+docker compose \
+  -f docker-compose.base.yml \
+  -f docker-compose.demos.yml \
+  -f docker-compose.projects.yml \
+  up -d --build
 ```
 
-## Deploy demo stack
+## CI deploy (recommended)
 
-```bash
-docker compose -f docker-compose.base.yml -f docker-compose.demos.yml up -d --build
-```
+Run the **Deploy Production** workflow in GitHub Actions. The workflow will:
+
+1. Join Tailscale.
+2. Sync this repository to `/opt/portfolio/compose`.
+3. Write `/opt/portfolio/env/.env` from `PORTFOLIO_ENV_FILE`.
+4. Pull GHCR images and restart the stack.
+5. Run remote smoke checks.
 
 ## Optional heavy profile
 
@@ -27,6 +55,7 @@ docker compose -f docker-compose.heavy.yml --profile heavy up -d
 ## Health checks
 
 ```bash
-curl -s http://localhost/healthz
-docker compose -f docker-compose.base.yml ps
+docker compose -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml ps
+curl -sk --resolve nilluv.com:443:127.0.0.1 https://nilluv.com
+curl -sk --resolve api.nilluv.com:443:127.0.0.1 https://api.nilluv.com/healthz
 ```
