@@ -13,7 +13,5 @@ Target host: 8 vCPU / 16 GB RAM.
 - brainsight: 900 MB, 1.00 CPU
 - getaround: 900 MB, 1.00 CPU
 - fraudstream: 1200 MB, 1.20 CPU
-- uber-hotzone-viewer: 256 MB, 0.30 CPU
-- walmart-forecast-viewer: 256 MB, 0.30 CPU
 
-Approximate steady-state cap: 5.78 GB RAM with headroom for OS, disk cache, and burst workloads.
+Approximate steady-state cap: 5.26 GB RAM with headroom for OS, disk cache, and burst workloads.

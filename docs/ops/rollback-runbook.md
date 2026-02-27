@@ -22,5 +22,5 @@ docker compose -f docker-compose.base.yml -f docker-compose.demos.yml stop showc
 If project services are causing pressure, stop non-core viewers first:
 
 ```bash
-docker compose -f docker-compose.base.yml -f docker-compose.projects.yml stop uber-hotzone-viewer walmart-forecast-viewer
+docker compose -f docker-compose.base.yml -f docker-compose.projects.yml stop brainsight getaround
 ```
