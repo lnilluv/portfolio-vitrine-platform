@@ -18,6 +18,7 @@ jobs:
         uses: tailscale/github-action@v3
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          version: latest
 
       - name: Sync stack files to VPS
         run: |
