@@ -19,31 +19,22 @@ jobs:
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
 
-      - name: Prepare SSH key
-        run: |
-          install -m 700 -d ~/.ssh
-          printf '%s\n' "${{ secrets.VPS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
-
       - name: Sync stack files to VPS
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p /opt/portfolio/compose /opt/portfolio/env /opt/portfolio/logs /opt/portfolio/data"
-          rsync -az --delete \
-            --exclude '.git/' \
-            --exclude '.github/' \
-            --exclude '.worktrees/' \
-            ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/portfolio/compose/"
+          tailscale ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p /opt/portfolio/compose /opt/portfolio/env /opt/portfolio/logs /opt/portfolio/data && rm -rf /opt/portfolio/compose/*"
+          tar \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.worktrees/' \
+            -czf - . | tailscale ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "tar -xzf - -C /opt/portfolio/compose"
 
       - name: Upload runtime environment file
         run: |
-          printf '%s\n' "${{ secrets.PORTFOLIO_ENV_FILE }}" > .env.production
-          scp .env.production "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/portfolio/env/.env"
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "chmod 600 /opt/portfolio/env/.env"
+          printf '%s\n' "${{ secrets.PORTFOLIO_ENV_FILE }}" | tailscale ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "cat > /opt/portfolio/env/.env && chmod 600 /opt/portfolio/env/.env"
 
       - name: Pull and restart stack
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+          tailscale ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -euo pipefail
             cd /opt/portfolio/compose
             docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" -p "${{ secrets.GHCR_TOKEN }}"
@@ -54,7 +45,7 @@ jobs:
 
       - name: Smoke checks
         run: |
-          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+          tailscale ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
             set -euo pipefail
             set -a
             . /opt/portfolio/env/.env

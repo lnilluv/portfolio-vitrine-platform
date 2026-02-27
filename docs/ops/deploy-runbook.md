@@ -11,10 +11,11 @@
 - `TAILSCALE_AUTHKEY`
 - `VPS_HOST` (`prod-vps-3`)
 - `VPS_USER` (`devops`)
-- `VPS_SSH_PRIVATE_KEY`
 - `GHCR_USERNAME`
 - `GHCR_TOKEN`
 - `PORTFOLIO_ENV_FILE` (multiline env file payload)
+
+`prod-vps-3` must allow Tailscale SSH for the deploy principal.
 
 ## VPS bootstrap (one-time)
 
