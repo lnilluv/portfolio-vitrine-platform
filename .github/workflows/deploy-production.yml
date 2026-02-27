@@ -40,7 +40,7 @@ jobs:
             cd /opt/portfolio/compose
             docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" -p "${{ secrets.GHCR_TOKEN }}"
             docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml pull
-            docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml up -d --remove-orphans
+            docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml up -d --build --remove-orphans
             docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml ps
           '
 

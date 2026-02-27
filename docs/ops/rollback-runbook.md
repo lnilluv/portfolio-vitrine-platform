@@ -24,3 +24,7 @@ If project services are causing pressure, stop non-core viewers first:
 ```bash
 docker compose -f docker-compose.base.yml -f docker-compose.projects.yml stop brainsight getaround
 ```
+
+## Cache policy rollback
+
+If catalog updates appear delayed, temporarily disable cacheability on `/projects` by rolling back `services/portfolio-api/src/portfolio_api/adapters/http/server.py` to a known-good commit and redeploying base stack.

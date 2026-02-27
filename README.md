@@ -9,6 +9,12 @@ Unified platform to showcase data projects on a constrained VPS.
 - `projects`: externally built project images routed through the shared edge.
 - `heavy`: optional heavy data stacks for temporary sessions.
 
+## Web experience
+
+- `services/portfolio-web` runs a SvelteKit SSR landing page.
+- The landing page server-loads project metadata from `portfolio-api` using `PORTFOLIO_API_BASE`.
+- Traefik routes public traffic to `portfolio-web` on container port `4173`.
+
 ## Production topology
 
 - Apex landing page: `nilluv.com`

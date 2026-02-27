@@ -12,3 +12,6 @@ htmlcov/
 .DS_Store
 letsencrypt/
 services/**/.streamlit/secrets.toml
+services/portfolio-web/node_modules/
+services/portfolio-web/.svelte-kit/
+services/portfolio-web/build/

@@ -51,21 +51,24 @@ services:
     cpus: 0.40
 
   portfolio-web:
-    image: nginx:1.27-alpine
-    volumes:
-      - ./services/portfolio-web:/usr/share/nginx/html:ro
+    build:
+      context: .
+      dockerfile: services/portfolio-web/Dockerfile
+    environment:
+      PORTFOLIO_API_BASE: ${PORTFOLIO_API_BASE}
+      PORT: 4173
     expose:
-      - "80"
+      - "4173"
     labels:
       - traefik.enable=true
       - traefik.http.routers.portfolio-web.rule=Host(`${PORTFOLIO_WEB_HOST}`)
       - traefik.http.routers.portfolio-web.entrypoints=websecure
       - traefik.http.routers.portfolio-web.tls=true
       - traefik.http.routers.portfolio-web.tls.certresolver=letsencrypt
-      - traefik.http.services.portfolio-web.loadbalancer.server.port=80
+      - traefik.http.services.portfolio-web.loadbalancer.server.port=4173
     restart: unless-stopped
-    mem_limit: 150m
-    cpus: 0.20
+    mem_limit: 280m
+    cpus: 0.40
 
   postgres:
     image: postgres:16-alpine

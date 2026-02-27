@@ -59,3 +59,13 @@ docker compose -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-
 curl -sk --resolve nilluv.com:443:127.0.0.1 https://nilluv.com
 curl -sk --resolve api.nilluv.com:443:127.0.0.1 https://api.nilluv.com/healthz
 ```
+
+## Cache behavior verification
+
+- `portfolio-api` responds to `/projects` with `Cache-Control: public, max-age=120, s-maxage=120, stale-while-revalidate=300`.
+- `healthz` and non-catalog responses are marked `Cache-Control: no-store`.
+
+```bash
+curl -skI --resolve api.nilluv.com:443:127.0.0.1 https://api.nilluv.com/projects | grep -i cache-control
+curl -skI --resolve api.nilluv.com:443:127.0.0.1 https://api.nilluv.com/healthz | grep -i cache-control
+```
