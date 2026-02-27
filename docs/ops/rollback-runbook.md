@@ -7,8 +7,8 @@
 3. Redeploy pinned version.
 
 ```bash
-docker compose -f docker-compose.base.yml down
-docker compose -f docker-compose.base.yml up -d
+docker compose -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml down
+docker compose -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml up -d
 ```
 
 ## Emergency fallback
@@ -17,4 +17,10 @@ If demo services consume too much memory, stop demo profile and keep core online
 
 ```bash
 docker compose -f docker-compose.base.yml -f docker-compose.demos.yml stop showcase-streamlit nlp-spam-api
+```
+
+If project services are causing pressure, stop non-core viewers first:
+
+```bash
+docker compose -f docker-compose.base.yml -f docker-compose.projects.yml stop uber-hotzone-viewer walmart-forecast-viewer
 ```

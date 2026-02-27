@@ -39,3 +39,9 @@ body {
   color: #064e3b;
   font-size: 0.8rem;
 }
+
+.links {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}

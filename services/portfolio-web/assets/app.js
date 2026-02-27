@@ -4,9 +4,13 @@ async function loadProjects() {
     return;
   }
 
-  const fallbackBase = window.location.origin.replace("portfolio", "api.portfolio");
+  const host = window.location.hostname.replace(/^www\./, "");
+  const fallbackBase = host === "localhost" ? "http://127.0.0.1:8000" : `https://api.${host}`;
   const apiBase = window.PORTFOLIO_API_BASE || fallbackBase;
   const response = await fetch(`${apiBase}/projects`);
+  if (!response.ok) {
+    throw new Error(`API request failed with status ${response.status}`);
+  }
   const projects = await response.json();
 
   target.innerHTML = "";
@@ -18,7 +22,7 @@ async function loadProjects() {
       <h2>${project.title}</h2>
       <p>${project.business_problem}</p>
       <p><strong>Skills:</strong> ${project.skills.join(", ")}</p>
-      <p><a href="${project.live_url}" target="_blank" rel="noreferrer">Open showcase</a></p>
+      <p class="links"><a href="${project.live_url}" target="_blank" rel="noreferrer">Open showcase</a> <a href="${project.repo_url}" target="_blank" rel="noreferrer">Source code</a></p>
     `;
     target.appendChild(article);
   });

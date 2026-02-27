@@ -1,0 +1,75 @@
+services:
+  brainsight:
+    image: ${BRAINSIGHT_IMAGE}
+    expose:
+      - "80"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.brainsight.rule=Host(`${BRAINSIGHT_HOST}`)
+      - traefik.http.routers.brainsight.entrypoints=websecure
+      - traefik.http.routers.brainsight.tls=true
+      - traefik.http.routers.brainsight.tls.certresolver=letsencrypt
+      - traefik.http.services.brainsight.loadbalancer.server.port=80
+    restart: unless-stopped
+    mem_limit: 900m
+    cpus: 1.00
+
+  getaround:
+    image: ${GETAROUND_IMAGE}
+    expose:
+      - "8501"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.getaround.rule=Host(`${GETAROUND_HOST}`)
+      - traefik.http.routers.getaround.entrypoints=websecure
+      - traefik.http.routers.getaround.tls=true
+      - traefik.http.routers.getaround.tls.certresolver=letsencrypt
+      - traefik.http.services.getaround.loadbalancer.server.port=8501
+    restart: unless-stopped
+    mem_limit: 900m
+    cpus: 1.00
+
+  fraudstream:
+    image: ${FRAUDSTREAM_IMAGE}
+    expose:
+      - "8501"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.fraudstream.rule=Host(`${FRAUDSTREAM_HOST}`)
+      - traefik.http.routers.fraudstream.entrypoints=websecure
+      - traefik.http.routers.fraudstream.tls=true
+      - traefik.http.routers.fraudstream.tls.certresolver=letsencrypt
+      - traefik.http.services.fraudstream.loadbalancer.server.port=8501
+    restart: unless-stopped
+    mem_limit: 1200m
+    cpus: 1.20
+
+  uber-hotzone-viewer:
+    image: ${UBER_HOTZONE_IMAGE}
+    expose:
+      - "8080"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.uber-hotzone.rule=Host(`${UBER_HOTZONE_HOST}`)
+      - traefik.http.routers.uber-hotzone.entrypoints=websecure
+      - traefik.http.routers.uber-hotzone.tls=true
+      - traefik.http.routers.uber-hotzone.tls.certresolver=letsencrypt
+      - traefik.http.services.uber-hotzone.loadbalancer.server.port=8080
+    restart: unless-stopped
+    mem_limit: 256m
+    cpus: 0.30
+
+  walmart-forecast-viewer:
+    image: ${WALMART_FORECAST_IMAGE}
+    expose:
+      - "8080"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.walmart-forecast.rule=Host(`${WALMART_FORECAST_HOST}`)
+      - traefik.http.routers.walmart-forecast.entrypoints=websecure
+      - traefik.http.routers.walmart-forecast.tls=true
+      - traefik.http.routers.walmart-forecast.tls.certresolver=letsencrypt
+      - traefik.http.services.walmart-forecast.loadbalancer.server.port=8080
+    restart: unless-stopped
+    mem_limit: 256m
+    cpus: 0.30

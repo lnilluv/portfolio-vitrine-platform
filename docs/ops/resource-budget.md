@@ -1,6 +1,6 @@
 # Resource Budget
 
-Target host: 2 vCPU / 4 GB RAM.
+Target host: 8 vCPU / 16 GB RAM.
 
 ## Always-on budget
 
@@ -10,5 +10,10 @@ Target host: 2 vCPU / 4 GB RAM.
 - showcase-streamlit: 700 MB, 0.80 CPU
 - nlp-spam-api: 600 MB, 0.80 CPU
 - postgres: 400 MB, 0.20 CPU
+- brainsight: 900 MB, 1.00 CPU
+- getaround: 900 MB, 1.00 CPU
+- fraudstream: 1200 MB, 1.20 CPU
+- uber-hotzone-viewer: 256 MB, 0.30 CPU
+- walmart-forecast-viewer: 256 MB, 0.30 CPU
 
-Approximate steady-state cap: 2.26 GB RAM with headroom for OS and spikes.
+Approximate steady-state cap: 5.78 GB RAM with headroom for OS, disk cache, and burst workloads.

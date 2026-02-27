@@ -6,7 +6,7 @@
     "stack": ["tensorflow", "fastapi", "streamlit", "mlflow", "docker"],
     "skills": ["deep-learning", "mlops", "api-design"],
     "business_problem": "MRI based Alzheimer stage prediction showcase.",
-    "live_url": "https://demo.portfolio.local/brainsight",
+    "live_url": "https://brainsight.nilluv.com",
     "repo_url": "https://github.com/lnilluv/Brainsight-Alzheimer-prediction-DeepLearning-CNN"
   },
   {
@@ -16,7 +16,7 @@
     "stack": ["fastapi", "streamlit", "mlflow", "postgres", "docker"],
     "skills": ["experimentation", "inference-api", "analytics"],
     "business_problem": "Delay risk analytics and price recommendation.",
-    "live_url": "https://demo.portfolio.local/getaround",
+    "live_url": "https://getaround.nilluv.com",
     "repo_url": "https://github.com/lnilluv/getaround-eda-ml"
   },
   {
@@ -26,7 +26,7 @@
     "stack": ["kafka", "dbt", "airflow", "trino", "fastapi"],
     "skills": ["streaming", "data-contracts", "orchestration"],
     "business_problem": "Fraud scoring with streaming ingestion and quality gates.",
-    "live_url": "https://portfolio.local/case-studies/fraudstream",
+    "live_url": "https://fraudstream.nilluv.com",
     "repo_url": "https://github.com/lnilluv/fraudstream-data-platform"
   },
   {
@@ -36,7 +36,7 @@
     "stack": ["tensorflow", "fastapi", "docker"],
     "skills": ["nlp", "serving", "model-fallback"],
     "business_problem": "SMS spam classification API.",
-    "live_url": "https://spam.portfolio.local",
+    "live_url": "https://spam.nilluv.com",
     "repo_url": "https://github.com/lnilluv/nlp-spam-detector-api"
   },
   {
@@ -46,7 +46,7 @@
     "stack": ["python", "sklearn", "docker"],
     "skills": ["classification", "feature-engineering", "packaging"],
     "business_problem": "Visitor conversion prediction and model operations.",
-    "live_url": "https://portfolio.local/case-studies/conversion-rate",
+    "live_url": "https://conversion-rate.nilluv.com",
     "repo_url": "https://github.com/lnilluv/conversion-rate-mlops"
   },
   {
@@ -56,7 +56,7 @@
     "stack": ["python", "pandas", "docker"],
     "skills": ["geospatial-aggregation", "batch-processing", "reporting"],
     "business_problem": "Hotzone recommendation from pickup density.",
-    "live_url": "https://portfolio.local/case-studies/uber-hotzone",
+    "live_url": "https://uber-hotzone.nilluv.com",
     "repo_url": "https://github.com/lnilluv/uber-hotzone-ml"
   },
   {
@@ -66,7 +66,7 @@
     "stack": ["python", "sklearn", "docker"],
     "skills": ["forecasting", "model-evaluation", "cli-automation"],
     "business_problem": "Weekly sales baseline forecasting workflow.",
-    "live_url": "https://portfolio.local/case-studies/walmart-forecast",
+    "live_url": "https://walmart-forecast.nilluv.com",
     "repo_url": "https://github.com/lnilluv/walmart-sales-forecast"
   },
   {
@@ -76,7 +76,7 @@
     "stack": ["python", "scraping", "docker"],
     "skills": ["web-scraping", "data-enrichment", "mapping"],
     "business_problem": "Destination recommendation with weather and hotel data.",
-    "live_url": "https://portfolio.local/case-studies/kayak",
+    "live_url": "https://kayak.nilluv.com",
     "repo_url": "https://github.com/lnilluv/kayak-scrapping"
   }
 ]

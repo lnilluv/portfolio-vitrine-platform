@@ -1,0 +1,65 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Join tailnet
+        uses: tailscale/github-action@v3
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - name: Prepare SSH key
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Sync stack files to VPS
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p /opt/portfolio/compose /opt/portfolio/env /opt/portfolio/logs /opt/portfolio/data"
+          rsync -az --delete \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            --exclude '.worktrees/' \
+            ./ "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/portfolio/compose/"
+
+      - name: Upload runtime environment file
+        run: |
+          printf '%s\n' "${{ secrets.PORTFOLIO_ENV_FILE }}" > .env.production
+          scp .env.production "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/portfolio/env/.env"
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "chmod 600 /opt/portfolio/env/.env"
+
+      - name: Pull and restart stack
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            set -euo pipefail
+            cd /opt/portfolio/compose
+            docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" -p "${{ secrets.GHCR_TOKEN }}"
+            docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml pull
+            docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml up -d --remove-orphans
+            docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml ps
+          '
+
+      - name: Smoke checks
+        run: |
+          ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" '
+            set -euo pipefail
+            set -a
+            . /opt/portfolio/env/.env
+            set +a
+            curl -sk --resolve "$PORTFOLIO_WEB_HOST:443:127.0.0.1" "https://$PORTFOLIO_WEB_HOST" >/dev/null
+            curl -sk --resolve "$PORTFOLIO_API_HOST:443:127.0.0.1" "https://$PORTFOLIO_API_HOST/healthz" >/dev/null
+            curl -sk --resolve "$SPAM_HOST:443:127.0.0.1" "https://$SPAM_HOST/healthz" >/dev/null
+          '
