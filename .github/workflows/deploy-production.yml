@@ -51,7 +51,8 @@ jobs:
             set -a
             . /opt/portfolio/env/.env
             set +a
-            curl -sk --resolve "$PORTFOLIO_WEB_HOST:443:127.0.0.1" "https://$PORTFOLIO_WEB_HOST" >/dev/null
-            curl -sk --resolve "$PORTFOLIO_API_HOST:443:127.0.0.1" "https://$PORTFOLIO_API_HOST/healthz" >/dev/null
-            curl -sk --resolve "$SPAM_HOST:443:127.0.0.1" "https://$SPAM_HOST/healthz" >/dev/null
+            docker compose --env-file /opt/portfolio/env/.env -f /opt/portfolio/compose/docker-compose.base.yml -f /opt/portfolio/compose/docker-compose.demos.yml -f /opt/portfolio/compose/docker-compose.projects.yml ps
+            curl --silent --show-error --fail --insecure --retry 20 --retry-delay 3 --retry-all-errors --resolve "$PORTFOLIO_WEB_HOST:443:127.0.0.1" "https://$PORTFOLIO_WEB_HOST" >/dev/null
+            curl --silent --show-error --fail --insecure --retry 20 --retry-delay 3 --retry-all-errors --resolve "$PORTFOLIO_API_HOST:443:127.0.0.1" "https://$PORTFOLIO_API_HOST/healthz" >/dev/null
+            curl --silent --show-error --fail --insecure --retry 20 --retry-delay 3 --retry-all-errors --resolve "$SPAM_HOST:443:127.0.0.1" "https://$SPAM_HOST/healthz" >/dev/null
           '
