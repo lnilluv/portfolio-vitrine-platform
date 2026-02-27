@@ -22,7 +22,7 @@ jobs:
 
       - name: Sync stack files to VPS
         run: |
-          tailscale ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p /opt/portfolio/compose /opt/portfolio/env /opt/portfolio/logs /opt/portfolio/data && rm -rf /opt/portfolio/compose/*"
+          tailscale ssh "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" "mkdir -p /opt/portfolio/compose /opt/portfolio/env /opt/portfolio/logs /opt/portfolio/data"
           tar \
             --exclude='.git/' \
             --exclude='.github/' \
