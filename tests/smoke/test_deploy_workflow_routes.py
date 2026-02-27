@@ -9,11 +9,11 @@ class DeployWorkflowRoutesTest(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("--force-recreate proxy", workflow)
         self.assertIn(
-            "curl -sk --resolve nilluv.com:443:127.0.0.1 https://nilluv.com",
+            "curl -skf --resolve nilluv.com:443:127.0.0.1 https://nilluv.com",
             workflow,
         )
         self.assertIn(
-            "curl -sk --resolve api.nilluv.com:443:127.0.0.1 https://api.nilluv.com/healthz",
+            "curl -skf --resolve api.nilluv.com:443:127.0.0.1 https://api.nilluv.com/healthz",
             workflow,
         )
 
