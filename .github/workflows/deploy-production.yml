@@ -40,6 +40,7 @@ jobs:
             cd /opt/portfolio/compose
             docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" -p "${{ secrets.GHCR_TOKEN }}"
             docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml pull
+            docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml up -d --force-recreate proxy
             docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml up -d --build --remove-orphans
             docker compose --env-file /opt/portfolio/env/.env -f docker-compose.base.yml -f docker-compose.demos.yml -f docker-compose.projects.yml ps
           '
@@ -52,6 +53,8 @@ jobs:
             for container in compose-proxy-1 compose-portfolio-web-1 compose-portfolio-api-1 compose-nlp-spam-api-1; do
               [ "$(docker inspect -f "{{.State.Status}}" "$container")" = "running" ]
             done
+            curl -sk --resolve nilluv.com:443:127.0.0.1 https://nilluv.com > /dev/null
+            curl -sk --resolve api.nilluv.com:443:127.0.0.1 https://api.nilluv.com/healthz > /dev/null
             docker exec compose-portfolio-api-1 python -c "import urllib.request; urllib.request.urlopen(\"http://127.0.0.1:8000/healthz\", timeout=10)"
             docker exec compose-nlp-spam-api-1 python -c "import urllib.request; urllib.request.urlopen(\"http://127.0.0.1:8000/healthz\", timeout=10)"
           '
